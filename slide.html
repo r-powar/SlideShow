@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #header{
+           width: 800px;
+           height: 50px;
+           background-color: lightgray;
+           margin: 0 auto;
+        }
+
+        #start{
+            float: right;
+            margin-right:12px;
+            text-decoration: none;
+            color: dodgerblue;
+        }
+
+        #stop{
+            float: right;
+            margin-right:12px;
+            text-decoration: none;
+            color: dodgerblue;
+        }
+
+
+        #title{
+            position: relative;
+            top: 15px;
+            left: 350px ;
+        }
+
+        .left{
+            width:0;
+            height: 0;
+            border-top: 30px solid transparent ;
+            border-bottom: 30px solid transparent ;
+            border-right: 30px solid dodgerblue ;
+            position: relative;
+            left: 150px;
+            top: 150px;
+        }
+
+        .right{
+            width:0;
+            height: 0;
+            border-top: 30px solid transparent ;
+            border-bottom: 30px solid transparent ;
+            border-left: 30px solid dodgerblue ;
+            float: right;
+            position: relative;
+            bottom: 300px;
+            right: 150px;
+
+        }
+
+        #parent{
+            width:800px;
+            height: 400px;
+            overflow: hidden;
+            margin: 0 auto;
+            position: relative;
+            top: -50px;
+        }
+
+        #slider{
+            position: absolute;
+            height: 400px;
+            width: 4850px;
+        }
+
+        #footer{
+            width: 800px;
+            height: 50px;
+            background-color: lightgray;
+            margin: 0 auto;
+            position: relative;
+            bottom: 100px;
+        }
+
+        #tracker{
+            float: right;
+        }
+
+        #tracker > div{
+            display: inline;
+            padding: 2px;
+            background-color: dodgerblue;
+            border-radius: 50%;
+            position: relative;
+            top: 15px;
+            right: 5px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="header">
+    <div id="title">Image Title</div>
+    <!--<a href="#" id="start">Start Slideshow</a>-->
+    <a href="#" id="stop">Stop Slideshow</a>
+</div>
+<div class="left">
+</div>
+<div id="parent">
+    <div id="slider">
+    </div>
+</div>
+<div class="right">
+</div>
+<div style="clear:right"></div>
+<div id="footer">
+    <div id="tracker">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+        <div>5</div>
+        <div>6</div>
+    </div>
+</div>
+
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+
+    $.getJSON('data.json',function(data){
+        $.each(data.images, function(key){
+            setImages(data.images[key]);
+        });
+    });
+
+    function setImages(obj){
+        var imgTag = '';
+        imgTag += "<img src='" + obj.Url + "' style='width:800px;height:400px' alt ='"+ obj.Title +"' name='pics'/>";
+        $('#slider').append(imgTag);
+    }
+//    var slideshow = slide();
+//    $('#stop').click(clearInterval(slideshow));
+//    manualSlide();
+
+});
+
+function slide(){
+    setInterval(function(){
+        $('#slider :first-child').fadeOut().next('img').fadeIn().end().appendTo('#slider');
+    },2000);
+}
+
+var manualSlide = {
+  imageNum : 1,
+  imageLength: document.getElementById('slider').length,
+  image: document.getElementsByTagName('img'),
+  previous: function(){
+      if(this.imageNum > 1){
+          this.imageNum --;
+      }
+      else{
+          this.imageNum = this.imageLength;
+      }
+
+      document.pics.src = this.image[this.imageLength - 1];
+  }
+
+};
+
+
+//function manualSlide(){
+//    var slider = document.getElementById('parent');
+//
+//    var slideObj = {
+//      numSlides: slider.firstElementChild.children.length,
+//      currentSlide: 0,
+//      slide : slider,
+//      slideWidth: slider.firstElementChild.offsetWidth,
+//      nextSlide: function(){
+//          if(this.currentSlide === (this.numSlides - 1)){
+//              return;
+//          }
+//          var currentPosition = this.slide.scrollLeft;
+//          var finalPosition = ++this.currentSlide * this.slideWidth;
+//          var shift = setInterval(function(){
+//              if(currentPosition <= finalPosition){
+//                  this.slide.scrollLeft = currentPosition++;
+//              }
+//          },1);
+//      },
+//
+//     previousSlide:function(){
+//         if(this.currentSlide === 0){
+//             return;
+//         }
+//         var currentPosition = this.slide.scrollLeft;
+//         var finalPosition = --this.currentSlide * this.slideWidth;
+//         var shift = setInterval(function(){
+//             if(currentPosition >= finalPosition){
+//                 this.slide.scrollLeft = currentPosition--;
+//             }
+//         },1);
+//     }
+//
+//    };
+//}
+</script>
+</body>
+</html>
